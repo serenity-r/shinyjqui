@@ -23,10 +23,6 @@ devtools::install_github("yang-tang/shinyjqui")
 Usage
 -----
 
-In order to use other funtions in `shinyjqui`, please first call `includeJqueryUI()` in `ui` of a shiny app. This function loads necessary js and css into your html document.
-
-Here are some examples:
-
 ``` r
 # load packages
 library(shiny)
@@ -41,14 +37,13 @@ library(highcharter)
 server <- function(input, output) {}
 
 ui <- fluidPage(
-  includeJqueryUI(), # Load necessary web assets
-  jqui_draggabled(fileInput('file', 'File'))
+  jqui_draggable(fileInput('file', 'File'))
 )
 
 shinyApp(ui, server)
 ```
 
-![](fig/README-draggable.gif)
+![](inst/fig/README-draggable.gif)
 
 -   **Resizable:** Change the size of an element using the mouse.
 
@@ -60,14 +55,13 @@ server <- function(input, output) {
 }
 
 ui <- fluidPage(
-  includeJqueryUI(), # Load necessary web assets
-  jqui_resizabled(plotOutput('gg', width = '200px', height = '200px'))
+  jqui_resizable(plotOutput('gg', width = '200px', height = '200px'))
 )
 
 shinyApp(ui, server)
 ```
 
-![](fig/README-resizable.gif)
+![](inst/fig/README-resizable.gif)
 
 -   **Sortable:** Reorder elements in a list or grid using the mouse.
 
@@ -85,8 +79,7 @@ server <- function(input, output) {
 }
 
 ui <- fluidPage(
-  includeJqueryUI(), # Load necessary web assets
-  jqui_sortabled(div(id = 'plots',
+  jqui_sortable(div(id = 'plots',
                      highchartOutput('hc', width = '200px', height = '200px'),
                      plotOutput('gg', width = '200px', height = '200px')))
 )
@@ -94,7 +87,7 @@ ui <- fluidPage(
 shinyApp(ui, server)
 ```
 
-![](fig/README-sortable.gif)
+![](inst/fig/README-sortable.gif)
 
 -   **Animation Effects:** Apply an animation effect to an element. Effects can also be used in hide or show.
 
@@ -116,7 +109,6 @@ server <- function(input, output) {
 }
 
 ui <- fluidPage(
-  includeJqueryUI(), # Load necessary web assets
   div(style = 'width: 400px; height: 400px',
       plotOutput('gg', width = '100%', height = '100%')),
   selectInput('effect', NULL, choices = get_jqui_effects()),
@@ -127,7 +119,7 @@ ui <- fluidPage(
 shinyApp(ui, server)
 ```
 
-![](fig/README-effects.gif)
+![](inst/fig/README-effects.gif)
 
 -   **Classes transformation:** Add and remove class(es) to elements while animating all style changes.
 
@@ -150,8 +142,6 @@ server <- function(input, output) {
 }
 
 ui <- fluidPage(
-
-  includeJqueryUI(), # Load necessary web assets
 
   tags$head(
     tags$style(
@@ -176,7 +166,7 @@ ui <- fluidPage(
 shinyApp(ui, server)
 ```
 
-![](fig/README-classes.gif)
+![](inst/fig/README-classes.gif)
 
 -   **orderInput():** Display a list of items. Their order can be changed by drag and drop.
 
@@ -186,7 +176,6 @@ server <- function(input, output) {
 }
 
 ui <- fluidPage(
-  includeJqueryUI(),
   orderInput('source', 'Source', items = month.abb,
              as_source = TRUE, connect = 'dest'),
   orderInput('dest', 'Dest', items = NULL, placeholder = 'Drag items here...'),
@@ -196,4 +185,46 @@ ui <- fluidPage(
 shinyApp(ui, server)
 ```
 
-![](fig/README-orderInput.gif)
+![](inst/fig/README-orderInput.gif)
+
+-   **sortableTableOutput():** Render a HTML table with sortable rows.
+
+``` r
+ui <- fluidPage(
+  verbatimTextOutput("order"),
+  sortableTableOutput("tbl")
+)
+
+server <- function(input, output) {
+  output$order <- renderPrint({
+    cat("Rows order:\n")
+    input$tbl_order
+  })
+  output$tbl <- renderTable(head(mtcars), rownames = TRUE)
+}
+
+shinyApp(ui, server)
+```
+
+![](inst/fig/README-sortableTableOutput.gif)
+
+-   **selectableTableOutput():** Render a HTML table with selectable rows or cells.
+
+``` r
+ui <- fluidPage(
+  selectableTableOutput("tbl", selection_mode = "cell"),
+  verbatimTextOutput("selected")
+)
+
+server <- function(input, output) {
+  output$selected <- renderPrint({
+    cat("Selected:\n")
+    input$tbl_selected
+  })
+  output$tbl <- renderTable(head(mtcars), rownames = TRUE)
+}
+
+shinyApp(ui, server)
+```
+
+![](inst/fig/README-selectableTableOutput_cell.gif)

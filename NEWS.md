@@ -1,8 +1,29 @@
-# shinyjqui 0.1.0.9000
+## shinyjqui 0.2.9001
 
-* New `jqui_icon()` creates a jQuery UI icon.
+* __New feature:__ Introduce `save` and `load` operations to mouse-interaction attached html elements. This enabled client-side store and restore the elements' states (eg. position, size, selection and order). (#16)
+* __New feature:__ The `-able` functions can be used in both shiny `server` and `ui`, and therefore, the `-abled` functions are deprecated.
+* __New feature:__ Adds shiny bookmark supporting to mouse-interaction attached html elements. This enabled server-side or across-client store and restore the elements' states (eg. position, size, selection and order). (#12)
+* __New feature:__ Now, all interaction functions' `selector` argument accepts `JS()` wrapped javascript expression. This made the target element selection more flexible. 
+* __New feature:__ Add `draggableModalDialog()`, `sortableCheckboxGroupInput()`, `sortableRadioButtons()`, `sortableTabsetPanel()`, `sortableTableOutput()` and `selectableTableOutput()` functions to create shiny inputs and outputs with mouse interactions.
+* __Breaking change:__ The `switch` argument in mouse-interaction functions was replaced with `operation` argument to support more options.
+* __Breaking change:__ The shiny input values `selected` from selectable and `order` from sortable now return elements' `innerText` instead of `innerHTML`.
+* __Bug fix:__ The mouse interaction function doesn't work when the same element is inserted again. (#6, #8)
+* __Bug fix:__ Resizable interferes with other interactions when the target element is a shiny output. (#10)
+* __Bug fix:__ Add `htmlDependency` to `jqui_icon()` to make it work in version 0.2.0 and above.
 
-# shinyjqui 0.1.0
+
+## shinyjqui 0.2.0
+
+* No longer needed to call `includeJqueryUI()` before using other `shinyjqui` functions.(#4)
+* New `jqui_icon()` to create a jQuery UI icon.
+* New `jqui_toggle()` to toggle display/hide state of a shiny html element with animation.
+* New pre-defined interaction-specific shiny input values: `is_dragging` for draggable; `over`, `drop`, `dropped` and `out` for droppable; `is_resizing` for resizable; `is_selecting` for selectable.(#1) See vignettes for details. 
+* Minify `shinyjqui.js`.(#3)
+* Import and export `JS()` from `htmlwidgets` package.
+* Add pkgdown docs.
+* Documentation with Roxygen2 6.0.1.
+
+## shinyjqui 0.1.0
 
 * Added a `NEWS.md` file to track changes to the package.
 

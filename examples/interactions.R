@@ -2,10 +2,10 @@ library(shiny)
 library(highcharter)
 
 ## used in ui
-jqui_resizabled(actionButton('btn', 'Button'))
-jqui_draggabled(plotOutput('plot', width = '400px', height = '400px'),
+jqui_resizable(actionButton('btn', 'Button'))
+jqui_draggable(plotOutput('plot', width = '400px', height = '400px'),
                 options = list(axis = 'x'))
-jqui_selectabled(
+jqui_selectable(
   div(
     id = 'sel_plots',
     highchartOutput('highchart', width = '300px'),
@@ -15,7 +15,7 @@ jqui_selectabled(
     classes = list(`ui-selected` = 'ui-state-highlight')
   )
 )
-jqui_sortabled(tags$ul(
+jqui_sortable(tags$ul(
   id = 'lst',
   tags$li('A'),
   tags$li('B'),
@@ -25,29 +25,29 @@ jqui_sortabled(tags$ul(
 ## used in server
 \dontrun{
   jqui_draggable('#foo', options = list(grid = c(80, 80)))
-  jqui_droppable('.foo', switch = FALSE)
+  jqui_droppable('.foo', operation = "enable")
 }
 
 ## use shiny input
 if (interactive()) {
-  server <- function(input, output) {
-    output$foo <- renderHighchart({
-      hchart(mtcars, "scatter", hcaes(x = cyl, y = mpg))
-    })
-    output$position <- renderPrint({
-      print(input$foo_position)
-    })
-  }
-  ui <- fluidPage(
-    includeJqueryUI(),
-    verbatimTextOutput('position'),
-    jqui_draggabled(highchartOutput('foo', width = '200px', height = '200px'))
+  shinyApp(
+    server = function(input, output) {
+      output$foo <- renderHighchart({
+        hchart(mtcars, "scatter", hcaes(x = cyl, y = mpg))
+      })
+      output$position <- renderPrint({
+        print(input$foo_position)
+      })
+    },
+    ui = fluidPage(
+      verbatimTextOutput('position'),
+      jqui_draggable(highchartOutput('foo', width = '200px', height = '200px'))
+    )
   )
-  shinyApp(ui, server)
 }
 
 ## custom shiny input
-func <- htmlwidgets::JS('function(event, ui){return $(event.target).offset();}')
+func <- JS('function(event, ui){return $(event.target).offset();}')
 options <-  list(
   shiny = list(
     abs_position = list(
@@ -56,7 +56,7 @@ options <-  list(
     )
   )
 )
-jqui_draggabled(highchartOutput('foo', width = '200px', height = '200px'),
+jqui_draggable(highchartOutput('foo', width = '200px', height = '200px'),
                 options = options)
 
 
